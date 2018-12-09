@@ -17,7 +17,7 @@ public class ZookeeperConsumerServiceDemoDependencyClient {
     @Autowired
     private TheClient theClient;
 
-    @FeignClient(name = "zookeeper-dependency-demo")
+    @FeignClient(name = "zookeeper-backend-service-demo")
     interface TheClient {
 
         @RequestMapping(path = "/helloworld", method = RequestMethod.GET)
