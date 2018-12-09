@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: zookeeper-consumer-service-demo
+  cloud:
+    zookeeper:
+      dependencies:
+        zookeeper-dependency-demo:
+          path: /zookeeper-backend-service-demo
+          loadBalancerType: ROUND_ROBIN
+          required: false
+      default-health-endpoint: /actuator/health
+management:
+  endpoint:
+    refresh:
+      enabled: true

@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    zookeeper:
+      config:
+        enabled: true
+        watcher:
+          enabled: true
