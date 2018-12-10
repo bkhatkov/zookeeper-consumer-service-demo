@@ -40,13 +40,19 @@ public class ZookeeperConsumerServiceDemoController {
             result.append(service + "\r\n");
         }
         result.append("Zookeeper Dependency Demo: \r\n");
-        List<ServiceInstance> serviceInstances = discoveryClient.getInstances("zookeeper-dependency-demo");
+        List<ServiceInstance> serviceInstances = discoveryClient.getInstances("zookeeper-backend-service-demo");
         for (ServiceInstance serviceInstance: serviceInstances) {
             result.append(serviceInstance.getUri().toString() + "[" + serviceInstance.getServiceId() + "]" + "\r\n");
         }
         result.append("Properties:\r\n");
         result.append(zookeeperDemoConfigurationProperties.toString());
         return result.toString();
+    }
+
+    @GetMapping("/discovery/all")
+    public List<ServiceInstance> discoveryAll() {
+        List<ServiceInstance> serviceInstances = discoveryClient.getInstances("zookeeper-backend-service-demo");
+        return serviceInstances;
     }
 
     @GetMapping("/properties")
