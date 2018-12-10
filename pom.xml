@@ -65,10 +65,19 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <!--HYSTRIX GAMING-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
+            <version>1.4.5.RELEASE</version>
         </dependency>
 
     </dependencies>
