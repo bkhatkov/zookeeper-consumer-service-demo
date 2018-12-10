@@ -6,7 +6,10 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ZookeeperConsumerServiceDemoController {
@@ -25,31 +28,38 @@ public class ZookeeperConsumerServiceDemoController {
         return "Hello ZooKeeper!";
     }
 
-    @GetMapping("/getHelloWorld")
+    @GetMapping("/checkBackend")
     public String getHelloWorld() {
         return zookeeperDependencyDemoClient.helloWorld();
     }
 
     @GetMapping("/discovery")
-    public String hi() {
-        StringBuilder result = new StringBuilder();
-        result.append("Discovery: \r\n");
-        result.append("Services: \r\n");
+    public Map<String, List<Object>> discovery() {
+        Map<String, List<Object>> res = new HashMap<>();
+        res.put("services", new ArrayList<>());
+        res.put("dependencies", new ArrayList<>());
+        res.put("configuration", new ArrayList<>());
+
         List<String> services = discoveryClient.getServices();
         for (String service : services) {
-            result.append(service + "\r\n");
+            List<Object> temp = res.get("services");
+            temp.add(service);
+            res.put("services", temp);
         }
-        result.append("Zookeeper Dependency Demo: \r\n");
         List<ServiceInstance> serviceInstances = discoveryClient.getInstances("zookeeper-backend-service-demo");
-        for (ServiceInstance serviceInstance: serviceInstances) {
-            result.append(serviceInstance.getUri().toString() + "[" + serviceInstance.getServiceId() + "]" + "\r\n");
-        }
-        result.append("Properties:\r\n");
-        result.append(zookeeperDemoConfigurationProperties.toString());
-        return result.toString();
+        List<Object> temp = res.get("dependencies");
+        temp.add(serviceInstances);
+        res.put("dependencies", temp);
+
+        List<Object> temp2 = res.get("configuration");
+        Map<String, String> props = new HashMap<>();
+        props.put("test_propery_1", zookeeperDemoConfigurationProperties.getTest_property_1());
+        temp2.add(props);
+        res.put("configuration", temp2);
+        return res;
     }
 
-    @GetMapping("/discovery/all")
+    @GetMapping("/discovery/dependencies")
     public List<ServiceInstance> discoveryAll() {
         List<ServiceInstance> serviceInstances = discoveryClient.getInstances("zookeeper-backend-service-demo");
         return serviceInstances;
