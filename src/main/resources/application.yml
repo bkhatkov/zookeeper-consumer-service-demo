@@ -6,10 +6,12 @@ spring:
       dependencies:
         zookeeper-dependency-demo:
           path: /zookeeper-backend-service-demo
-          loadBalancerType: ROUND_ROBIN
+          loadBalancerType: STICKY
           required: false
       default-health-endpoint: /actuator/health
 management:
   endpoint:
     refresh:
       enabled: true
+server:
+  port: 8080

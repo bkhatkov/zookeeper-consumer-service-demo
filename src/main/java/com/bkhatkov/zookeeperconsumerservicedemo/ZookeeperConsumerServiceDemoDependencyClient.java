@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ZookeeperConsumerServiceDemoDependencyClient {
 
     @Autowired
-    private TheClient theClient;
+    private BackendClient backendClient;
 
     @FeignClient(name = "zookeeper-backend-service-demo")
-    interface TheClient {
+    interface BackendClient {
 
         @RequestMapping(path = "/helloworld", method = RequestMethod.GET)
         @ResponseBody
@@ -26,7 +26,7 @@ public class ZookeeperConsumerServiceDemoDependencyClient {
     }
 
     public String helloWorld() {
-        return theClient.helloWorld();
+        return backendClient.helloWorld();
     }
 
 }
