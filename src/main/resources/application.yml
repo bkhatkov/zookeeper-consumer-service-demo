@@ -4,9 +4,9 @@ spring:
   cloud:
     zookeeper:
       dependencies:
-        zookeeper-dependency-demo:
+        zookeeper-backend-service-demo:
           path: /zookeeper-backend-service-demo
-          loadBalancerType: STICKY
+          loadBalancerType: ROUND_ROBIN
           required: false
       default-health-endpoint: /actuator/health
 management:
