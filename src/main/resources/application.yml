@@ -9,6 +9,8 @@ spring:
           loadBalancerType: ROUND_ROBIN
           required: false
       default-health-endpoint: /actuator/health
+  devtools:
+    add-properties: false
 management:
   endpoint:
     refresh:
