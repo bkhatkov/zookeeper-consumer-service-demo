@@ -1,8 +1,10 @@
 package com.bkhatkov.zookeeperconsumerservicedemo;
 
+import io.jmnarloch.spring.cloud.ribbon.support.RibbonFilterContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.zookeeper.discovery.ZookeeperServerList;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
