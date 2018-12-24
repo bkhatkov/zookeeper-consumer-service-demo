@@ -16,9 +16,13 @@ public class VersionAwareServerListFilter extends AbstractServerListFilter<Zooke
 
     @Override
     public List<ZookeeperServer> getFilteredListOfServers(List<ZookeeperServer> list) {
+
         return list.stream().
-                filter(zookeeperServer -> (zookeeperServer.getInstance().getPayload().
-                        getMetadata().get("version").compareToIgnoreCase(this.version) == 0))
+                filter(zookeeperServer -> (
+                        (this.version != null && zookeeperServer.getInstance().getPayload().
+                                getMetadata().get("version").compareToIgnoreCase(this.version) == 0)) ||
+                        (this.version == null && zookeeperServer.getInstance().getPayload().
+                                getMetadata().get("version").compareToIgnoreCase("V1") == 0))
                 .collect(Collectors.toList());
     }
 }

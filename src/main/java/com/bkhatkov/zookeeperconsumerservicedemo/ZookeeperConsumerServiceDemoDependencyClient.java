@@ -59,9 +59,9 @@ public class ZookeeperConsumerServiceDemoDependencyClient implements Application
         final String requestedVersion = (attributes.getRequest().getHeader("version") == null ||
                 attributes.getRequest().getHeader("version").compareToIgnoreCase("") ==0) ?
                     "V1" : attributes.getRequest().getHeader("version");
-        final String requestedTenant = (attributes.getRequest().getHeader("tenant") == null ||
-                attributes.getRequest().getHeader("tenant").compareToIgnoreCase("") ==0) ?
-                "default" : attributes.getRequest().getHeader("tenant");
+//        final String requestedTenant = (attributes.getRequest().getHeader("tenant") == null ||
+//                attributes.getRequest().getHeader("tenant").compareToIgnoreCase("") ==0) ?
+//                "default" : attributes.getRequest().getHeader("tenant");
 
         SpringClientFactory springClientFactory = applicationContext.getBean(SpringClientFactory.class);
         ILoadBalancer loadBalancer = springClientFactory.getLoadBalancer("zookeeper-backend-service-demo");
