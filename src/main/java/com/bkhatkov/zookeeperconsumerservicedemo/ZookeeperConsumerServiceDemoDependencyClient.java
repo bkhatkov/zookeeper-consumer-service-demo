@@ -49,6 +49,8 @@ public class ZookeeperConsumerServiceDemoDependencyClient { //implements Applica
         Map<String, String> filters = new HashMap<>();
         filters.put("version", ((ServletRequestAttributes) RequestContextHolder.
                 currentRequestAttributes()).getRequest().getHeader("version"));
+        filters.put("tenant", ((ServletRequestAttributes) RequestContextHolder.
+                currentRequestAttributes()).getRequest().getHeader("tenant"));
         return new MetadataAwareServderListFilter(filters);
     }
 
@@ -61,15 +63,6 @@ public class ZookeeperConsumerServiceDemoDependencyClient { //implements Applica
     }
 
     public String helloWorld() {
-
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        final String requestedVersion = (attributes.getRequest().getHeader("version") == null ||
-                attributes.getRequest().getHeader("version").compareToIgnoreCase("") ==0) ?
-                    "V1" : attributes.getRequest().getHeader("version");
-//        final String requestedTenant = (attributes.getRequest().getHeader("tenant") == null ||
-//                attributes.getRequest().getHeader("tenant").compareToIgnoreCase("") ==0) ?
-//                "default" : attributes.getRequest().getHeader("tenant");
-
         DynamicServerListLoadBalancer<ZookeeperServer> dynamicServerListLoadBalancer =
                 (DynamicServerListLoadBalancer) this.springClientFactory.getLoadBalancer(backendServiceName);
 
