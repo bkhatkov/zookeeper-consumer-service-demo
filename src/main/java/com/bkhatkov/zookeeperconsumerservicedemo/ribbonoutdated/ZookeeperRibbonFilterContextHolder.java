@@ -1,4 +1,4 @@
-package com.bkhatkov.zookeeperconsumerservicedemo.outdated;
+package com.bkhatkov.zookeeperconsumerservicedemo.ribbonoutdated;
 
 public class ZookeeperRibbonFilterContextHolder {
 

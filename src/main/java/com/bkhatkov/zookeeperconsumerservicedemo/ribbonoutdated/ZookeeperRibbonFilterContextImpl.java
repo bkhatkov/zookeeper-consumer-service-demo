@@ -1,4 +1,4 @@
-package com.bkhatkov.zookeeperconsumerservicedemo.outdated;
+package com.bkhatkov.zookeeperconsumerservicedemo.ribbonoutdated;
 
 import java.util.HashMap;
 import java.util.Map;

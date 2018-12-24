@@ -1,4 +1,4 @@
-package com.bkhatkov.zookeeperconsumerservicedemo.outdated;
+package com.bkhatkov.zookeeperconsumerservicedemo.ribbonoutdated;
 
 import com.netflix.loadbalancer.AbstractServerPredicate;
 import com.netflix.loadbalancer.PredicateKey;

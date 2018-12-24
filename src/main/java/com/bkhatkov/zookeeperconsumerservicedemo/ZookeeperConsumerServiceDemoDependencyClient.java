@@ -1,8 +1,6 @@
 package com.bkhatkov.zookeeperconsumerservicedemo;
 
 import com.netflix.loadbalancer.DynamicServerListLoadBalancer;
-import com.netflix.loadbalancer.ILoadBalancer;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -10,8 +8,6 @@ import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.zookeeper.discovery.ZookeeperServer;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -21,6 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.support.RequestContext;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableFeignClients
@@ -43,18 +43,14 @@ public class ZookeeperConsumerServiceDemoDependencyClient { //implements Applica
                 currentRequestAttributes()).getRequest().getHeader("version"));
     }
 
-//    @Autowired
-//    private DiscoveryClient discoveryClient;
-//
-//    @Autowired
-//    private LoadBalancerClient loadBalancer;
-//
-//    private ApplicationContext applicationContext;
-//
-//    @Override
-//    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-//        this.applicationContext = applicationContext;
-//    }
+    @Bean
+    @Scope(value = WebApplicationContext.SCOPE_REQUEST)
+    public MetadataAwareServderListFilter metadataAwareServderListFilter() {
+        Map<String, String> filters = new HashMap<>();
+        filters.put("version", ((ServletRequestAttributes) RequestContextHolder.
+                currentRequestAttributes()).getRequest().getHeader("version"));
+        return new MetadataAwareServderListFilter(filters);
+    }
 
     @FeignClient(name = "${backend-service-name}") //zookeeper-backend-service-demo
     interface BackendClient {
@@ -77,14 +73,8 @@ public class ZookeeperConsumerServiceDemoDependencyClient { //implements Applica
         DynamicServerListLoadBalancer<ZookeeperServer> dynamicServerListLoadBalancer =
                 (DynamicServerListLoadBalancer) this.springClientFactory.getLoadBalancer(backendServiceName);
 
-//        dynamicServerListLoadBalancer.setFilter(new VersionAwareServerListFilter(requestedVersion));
-
-//        dynamicServerListLoadBalancer.setFilter(MetadataAwareServderListFilters.versionAwareServerListFilter(requestedVersion));
-        dynamicServerListLoadBalancer.setFilter(versionAwareServerListFilter());
+        dynamicServerListLoadBalancer.setFilter(metadataAwareServderListFilter());
         dynamicServerListLoadBalancer.updateListOfServers();
-
-//        ZookeeperRibbonFilterContext context = ZookeeperRibbonFilterContextHolder.getCurrentContext();
-//        context.add("version", "V100");
 
         return backendClient.helloWorld();
     }
