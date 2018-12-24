@@ -1,9 +1,6 @@
 package com.bkhatkov.zookeeperconsumerservicedemo;
 
-import com.netflix.loadbalancer.AbstractServerListFilter;
-import com.netflix.loadbalancer.DynamicServerListLoadBalancer;
-import com.netflix.loadbalancer.ILoadBalancer;
-import com.netflix.loadbalancer.ServerListFilter;
+import com.netflix.loadbalancer.*;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -22,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +54,7 @@ public class ZookeeperConsumerServiceDemoDependencyClient implements Application
     }
 
     public String helloWorld() {
+
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         final String requestedVersion = (attributes.getRequest().getHeader("version") == null ||
                 attributes.getRequest().getHeader("version").compareToIgnoreCase("") ==0) ?
@@ -69,23 +68,25 @@ public class ZookeeperConsumerServiceDemoDependencyClient implements Application
 
         DynamicServerListLoadBalancer<ZookeeperServer> dynamicServerListLoadBalancer = (DynamicServerListLoadBalancer) loadBalancer;
 
-        ServerListFilter<ZookeeperServer> filter = new AbstractServerListFilter<ZookeeperServer>() {
-            @Override
-            public List<ZookeeperServer> getFilteredListOfServers(List<ZookeeperServer> list) {
-                List<ZookeeperServer> result = new ArrayList<>();
-                for (ZookeeperServer zookeeperServer : list) {
-                    if (zookeeperServer.getInstance().getPayload().getMetadata().get("version").compareToIgnoreCase(requestedVersion) == 0
-                            && zookeeperServer.getInstance().getPayload().getMetadata().get("tenant").compareToIgnoreCase(requestedTenant) == 0) {
-                        result.add(zookeeperServer);
-                    }
-                }
-                return result;
-                //list.stream().filter(zookeeperServer -> (zookeeperServer.getInstance().getPayload().getMetadata().get("version").compareToIgnoreCase(requestedVersion) == 0)).collect(Collectors.toList());
-            }
-        };
-
-        dynamicServerListLoadBalancer.setFilter(filter);
+        dynamicServerListLoadBalancer.setFilter(new VersionAwareServerListFilter(requestedVersion));
         dynamicServerListLoadBalancer.updateListOfServers();
+
+
+
+//        IRule rule = new PredicateBasedRule() {
+//            @Override
+//            public AbstractServerPredicate getPredicate() {
+//                return new AbstractServerPredicate() {
+//                    @Override
+//                    public boolean apply(@Nullable PredicateKey predicateKey) {
+//                        return ((ZookeeperServer) predicateKey.getServer()).getInstance().getPayload().getMetadata().get("version").compareToIgnoreCase("V2") == 0;
+//                    }
+//                };
+//            }
+//        };
+
+//        dynamicServerListLoadBalancer.setRule(new VersionAwareRule(requestedVersion));
+//        dynamicServerListLoadBalancer.updateListOfServers();
 
         return backendClient.helloWorld();
     }
