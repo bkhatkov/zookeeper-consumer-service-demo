@@ -19,3 +19,4 @@ ribbon:
   filter:
     metadata:
       enabled: true
+backend-service-name: zookeeper-backend-service-demo
