@@ -6,6 +6,7 @@ import org.springframework.cloud.zookeeper.discovery.watcher.DependencyWatcherLi
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextListener;
 
 @Configuration
 public class ApplicationConfiguration {
@@ -25,4 +26,16 @@ public class ApplicationConfiguration {
             }
         };
     }
+
+    @Bean public RequestContextListener requestContextListener(){
+        return new RequestContextListener();
+    }
+
+
+//    @Bean
+//    @ConditionalOnMissingBean
+//    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+//    public DiscoveryEnabledRule metadataAwareRule() {
+//        return new MetadataAwareRule();
+//    }
 }

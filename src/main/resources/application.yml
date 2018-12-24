@@ -15,5 +15,7 @@ management:
   endpoint:
     refresh:
       enabled: true
-server:
-  port: 8080
+ribbon:
+  filter:
+    metadata:
+      enabled: true
