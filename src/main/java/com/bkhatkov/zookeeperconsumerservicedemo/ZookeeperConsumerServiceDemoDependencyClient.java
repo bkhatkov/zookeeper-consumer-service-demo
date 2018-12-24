@@ -71,23 +71,6 @@ public class ZookeeperConsumerServiceDemoDependencyClient implements Application
         dynamicServerListLoadBalancer.setFilter(new VersionAwareServerListFilter(requestedVersion));
         dynamicServerListLoadBalancer.updateListOfServers();
 
-
-
-//        IRule rule = new PredicateBasedRule() {
-//            @Override
-//            public AbstractServerPredicate getPredicate() {
-//                return new AbstractServerPredicate() {
-//                    @Override
-//                    public boolean apply(@Nullable PredicateKey predicateKey) {
-//                        return ((ZookeeperServer) predicateKey.getServer()).getInstance().getPayload().getMetadata().get("version").compareToIgnoreCase("V2") == 0;
-//                    }
-//                };
-//            }
-//        };
-
-//        dynamicServerListLoadBalancer.setRule(new VersionAwareRule(requestedVersion));
-//        dynamicServerListLoadBalancer.updateListOfServers();
-
         return backendClient.helloWorld();
     }
 
