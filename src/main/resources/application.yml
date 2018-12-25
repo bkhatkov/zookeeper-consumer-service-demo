@@ -22,4 +22,4 @@ ribbon:
 backend-service-name: zookeeper-backend-service-demo
 zookeeper-backend-service-demo:
   ribbon:
-    NFLoadBalancerRuleClassName: MetadataAwareRule
+    NFLoadBalancerRuleClassName: com.bkhatkov.zookeeperconsumerservicedemo.ribbon.metadata.MetadataAwareRule

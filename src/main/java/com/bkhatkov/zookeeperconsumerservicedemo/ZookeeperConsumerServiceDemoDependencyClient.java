@@ -1,13 +1,11 @@
 package com.bkhatkov.zookeeperconsumerservicedemo;
 
-import com.netflix.loadbalancer.DynamicServerListLoadBalancer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.cloud.zookeeper.discovery.ZookeeperServer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -41,7 +39,6 @@ public class ZookeeperConsumerServiceDemoDependencyClient { //implements Applica
         return new VersionAwareServerListFilter(((ServletRequestAttributes) RequestContextHolder.
                 currentRequestAttributes()).getRequest().getHeader("version"));
     }
-
 
     @FeignClient(name = "${backend-service-name}") //zookeeper-backend-service-demo
     interface BackendClient {
