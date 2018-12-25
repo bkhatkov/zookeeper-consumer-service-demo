@@ -20,6 +20,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Configuration
 @EnableFeignClients
@@ -66,6 +67,15 @@ public class ZookeeperConsumerServiceDemoDependencyClient { //implements Applica
                 (DynamicServerListLoadBalancer) this.springClientFactory.getLoadBalancer(backendServiceName);
 
         dynamicServerListLoadBalancer.setFilter(versionAwareServerListFilter());
+
+        if (ThreadLocalRandom.current().nextInt(0, 10) % 2 == 0) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         dynamicServerListLoadBalancer.updateListOfServers();
 
         return backendClient.helloWorld();

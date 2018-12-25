@@ -17,7 +17,7 @@ public class VersionAwareServerListFilter extends AbstractServerListFilter<Zooke
     @Override
     public List<ZookeeperServer> getFilteredListOfServers(List<ZookeeperServer> list) {
 
-        Double minVersion = list.stream().mapToDouble(value -> Double.valueOf(value.getInstance().getPayload().getMetadata().get("versionn"))).min().getAsDouble();
+        Double minVersion = list.stream().mapToDouble(value -> Double.valueOf(value.getInstance().getPayload().getMetadata().get("version"))).min().getAsDouble();
 //        System.out.println(String.valueOf(minVersion));
 
         return list.stream().
