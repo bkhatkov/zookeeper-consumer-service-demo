@@ -65,7 +65,7 @@ public class ZookeeperConsumerServiceDemoDependencyClient { //implements Applica
         DynamicServerListLoadBalancer<ZookeeperServer> dynamicServerListLoadBalancer =
                 (DynamicServerListLoadBalancer) this.springClientFactory.getLoadBalancer(backendServiceName);
 
-        dynamicServerListLoadBalancer.setFilter(metadataAwareServerListFilter());
+        dynamicServerListLoadBalancer.setFilter(versionAwareServerListFilter());
         dynamicServerListLoadBalancer.updateListOfServers();
 
         return backendClient.helloWorld();
