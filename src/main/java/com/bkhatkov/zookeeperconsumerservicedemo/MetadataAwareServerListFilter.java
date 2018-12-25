@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class MetadataAwareServderListFilter extends AbstractServerListFilter<ZookeeperServer> {
+public class MetadataAwareServerListFilter extends AbstractServerListFilter<ZookeeperServer> {
 
     private Map<String, String> attributes;
 
-    public MetadataAwareServderListFilter(Map<String, String> attributes) {
+    public MetadataAwareServerListFilter(Map<String, String> attributes) {
         this.attributes = attributes;
     }
 

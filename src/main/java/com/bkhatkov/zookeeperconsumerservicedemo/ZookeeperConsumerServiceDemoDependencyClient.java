@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.support.RequestContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,13 +44,13 @@ public class ZookeeperConsumerServiceDemoDependencyClient { //implements Applica
 
     @Bean
     @Scope(value = WebApplicationContext.SCOPE_REQUEST)
-    public MetadataAwareServderListFilter metadataAwareServderListFilter() {
+    public MetadataAwareServerListFilter metadataAwareServerListFilter() {
         Map<String, String> filters = new HashMap<>();
         filters.put("version", ((ServletRequestAttributes) RequestContextHolder.
                 currentRequestAttributes()).getRequest().getHeader("version"));
         filters.put("tenant", ((ServletRequestAttributes) RequestContextHolder.
                 currentRequestAttributes()).getRequest().getHeader("tenant"));
-        return new MetadataAwareServderListFilter(filters);
+        return new MetadataAwareServerListFilter(filters);
     }
 
     @FeignClient(name = "${backend-service-name}") //zookeeper-backend-service-demo
@@ -66,7 +65,7 @@ public class ZookeeperConsumerServiceDemoDependencyClient { //implements Applica
         DynamicServerListLoadBalancer<ZookeeperServer> dynamicServerListLoadBalancer =
                 (DynamicServerListLoadBalancer) this.springClientFactory.getLoadBalancer(backendServiceName);
 
-        dynamicServerListLoadBalancer.setFilter(metadataAwareServderListFilter());
+        dynamicServerListLoadBalancer.setFilter(metadataAwareServerListFilter());
         dynamicServerListLoadBalancer.updateListOfServers();
 
         return backendClient.helloWorld();
