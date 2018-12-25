@@ -15,11 +15,11 @@ management:
   endpoint:
     refresh:
       enabled: true
-ribbon:
-  filter:
-    metadata:
-      enabled: true
+#ribbon:
+#  filter:
+#    metadata:
+#      enabled: true
 backend-service-name: zookeeper-backend-service-demo
 zookeeper-backend-service-demo:
   ribbon:
-    NFLoadBalancerRuleClassName: com.bkhatkov.zookeeperconsumerservicedemo.ribbon.metadata.MetadataAwareRule
+    NFLoadBalancerRuleClassName: com.bkhatkov.spring.cloud.ribbon.rule.ZookeeperMetadataAwareRule
