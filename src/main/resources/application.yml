@@ -20,3 +20,6 @@ ribbon:
     metadata:
       enabled: true
 backend-service-name: zookeeper-backend-service-demo
+zookeeper-backend-service-demo:
+  ribbon:
+    NFLoadBalancerRuleClassName: MetadataAwareRule

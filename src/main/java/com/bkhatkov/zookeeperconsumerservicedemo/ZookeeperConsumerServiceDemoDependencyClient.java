@@ -20,7 +20,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Configuration
 @EnableFeignClients
@@ -43,16 +42,6 @@ public class ZookeeperConsumerServiceDemoDependencyClient { //implements Applica
                 currentRequestAttributes()).getRequest().getHeader("version"));
     }
 
-    @Bean
-    @Scope(value = WebApplicationContext.SCOPE_REQUEST)
-    public MetadataAwareServerListFilter metadataAwareServerListFilter() {
-        Map<String, String> filters = new HashMap<>();
-        filters.put("version", ((ServletRequestAttributes) RequestContextHolder.
-                currentRequestAttributes()).getRequest().getHeader("version"));
-        filters.put("tenant", ((ServletRequestAttributes) RequestContextHolder.
-                currentRequestAttributes()).getRequest().getHeader("tenant"));
-        return new MetadataAwareServerListFilter(filters);
-    }
 
     @FeignClient(name = "${backend-service-name}") //zookeeper-backend-service-demo
     interface BackendClient {
@@ -63,20 +52,11 @@ public class ZookeeperConsumerServiceDemoDependencyClient { //implements Applica
     }
 
     public String helloWorld() {
-        DynamicServerListLoadBalancer<ZookeeperServer> dynamicServerListLoadBalancer =
-                (DynamicServerListLoadBalancer) this.springClientFactory.getLoadBalancer(backendServiceName);
 
-        dynamicServerListLoadBalancer.setFilter(versionAwareServerListFilter());
-
-        if (ThreadLocalRandom.current().nextInt(0, 10) % 2 == 0) {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        dynamicServerListLoadBalancer.updateListOfServers();
+        Map<String, String> attrs = new HashMap<>();
+        attrs.put("version",  ((ServletRequestAttributes) RequestContextHolder.
+                currentRequestAttributes()).getRequest().getHeader("version"));
+        RequestContextHolder.currentRequestAttributes().setAttribute("filteringAttributes", attrs, 0);
 
         return backendClient.helloWorld();
     }
