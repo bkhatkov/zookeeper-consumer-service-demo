@@ -53,8 +53,11 @@ public class ZookeeperConsumerServiceDemoDependencyClient { //implements Applica
         Map<String, String> attrs = new HashMap<>();
         attrs.put("version",  ((ServletRequestAttributes) RequestContextHolder.
                 currentRequestAttributes()).getRequest().getHeader("version"));
-        attrs.put("tenant",  ((ServletRequestAttributes) RequestContextHolder.
-                currentRequestAttributes()).getRequest().getHeader("tenant"));
+        if (((ServletRequestAttributes) RequestContextHolder.
+                currentRequestAttributes()).getRequest().getHeader("tenant") != null) {
+            attrs.put("tenant", ((ServletRequestAttributes) RequestContextHolder.
+                    currentRequestAttributes()).getRequest().getHeader("tenant"));
+        }
         RequestContextHolder.currentRequestAttributes().setAttribute("filteringAttributes", attrs, 0);
 
         return backendClient.helloWorld();
